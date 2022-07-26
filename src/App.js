@@ -1,7 +1,11 @@
+import CheckBox from "./components/CheckBox"
+import "./index.css"
+
 function App() {
   return (
-    <div>
-    	nothing here....
+    <div className="checkbox-container">
+    	<h1 className="heading">Your todos</h1>
+    	<CheckBox />
     </div>
   );
 }
