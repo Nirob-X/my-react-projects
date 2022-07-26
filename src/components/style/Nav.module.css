@@ -1,0 +1,30 @@
+.navBar {
+	background-color: Lavender;
+	padding: 10px 10px; 
+}
+
+.uls {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0px;
+}
+
+.uls li {
+	list-style-type: none;
+	/* background-color: GreenYellow; */
+	border-radius: 5px;
+	padding: 5px;
+}
+
+
+.number {
+	border-radius: 10px;
+	width: 40px;
+	text-align: center;
+	font-size: 20px;
+	background-color: darkGray;
+	color: white;
+}
+
+

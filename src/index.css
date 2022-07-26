@@ -1,0 +1,39 @@
+* {
+	margin: 0px;
+	font-family: "JetBrains Mono";
+}
+
+body {
+	margin: 0px;
+	padding: 0px;
+	height: 90vh;
+	background-color: whitesmoke;
+}
+
+
+span {
+	padding: 10px 0px;
+	font-size: 20px;
+}
+
+button {
+	padding: 5px;
+	margin: 5px;
+	border-radius: 5px;
+	border: none;
+}
+
+.counter{
+	padding: 10px 20px;
+	text-align: center;
+}
+
+.add {
+	color: white;
+	background-color: MediumSeaGreen;
+}
+
+.sub {
+	color: white;
+	background-color: Crimson;
+}
