@@ -1,7 +1,6 @@
 import {useState} from "react";
-import style from "./CheckBox.module.css";
 
-export default function CheckBox() {
+export default function CheckBox({uid, text, deleteItem}) {
 	const [check, setCheck] = useState(false)
 	
 	const handleCheck = (e) => {
@@ -11,8 +10,9 @@ export default function CheckBox() {
 	
 	return (
 		<div className="checkbox-group">
-			<input type="checkbox" id="checkbox" checked={check} onChange={handleCheck} />
-			<label htmlFor="checkbox">Listen to music</label>
+			<input type="checkbox" id={uid} checked={check} onChange={handleCheck} />
+			<label htmlFor={uid}>{text}</label>
+			<button data-id={uid} onClick={deleteItem}>×</button>
 		</div>
 	);
 }
