@@ -1,5 +1,5 @@
-export default function Square({xORy, ...rest}) {
+export default function Square({text, fun}) {
 	return (
-		<span {...rest}>{xORy}</span>
+		<span onClick={fun}>{text}</span>
 	);
 }

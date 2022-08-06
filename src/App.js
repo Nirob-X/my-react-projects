@@ -1,58 +1,68 @@
-import {useState} from "react";
-import Square from "./components/Square"
+import {useReducer} from "react";
+import Square from "./components/Square";
 import "./index.css";
 
-function App() {
-	// eslint-disable-next-line
-	const [grid, setGrid] = useState(Array(9).fill(null));
-	const [isX, setIsX] = useState(true);
+const initState = {
+	squares: Array(9).fill(null),
+	x: true,
+	win: null
+}
 
-	const winner = (square) => {
-		const winingPattern = [
-			[0,1,2],
-			[3,4,5],
-			[6,7,8],
-			[0,3,6],
-			[1,4,7],
-			[2,5,8],
-			[0,4,8],
-			[2,4,6]
-		];
-
-		for (let i = 0; i<winingPattern.length; i++) {
-			const [a, b, c] = winingPattern[i];
-			if (square[a] && square[a] === square[b] && square[a] === square[c] ){
-				return square[a];
+const reducer = (state, action) => {
+	const checkWiner = (squares) => {
+		const pattern = [
+			[0, 1, 2],
+			[3, 4, 5],
+			[6, 7, 8],
+			[0, 3, 6],
+			[1, 4, 7],
+			[2, 5, 8],
+			[0, 4, 8],
+			[2, 4, 6]
+		]
+		
+		for (let item of pattern) {
+			const [a, b, c] = item;
+			if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+				return squares[a];
 			}
 		}
-
-		return null;
+		
+		return null;		
 	}
-
-	const win = winner(grid);
-
-	const handleClick = (index) => {
-		if (grid[index] || win) return
-		const xy = isX ? "X" : "O";
-		setGrid(prev => {
-			prev[index] = xy;
-			return prev;
-		});
-		setIsX(prev => !prev);
-	}
-
-	const restart = () => {
-		setIsX(true);
-		setGrid(Array(9).fill(null));
-	}
-
-	const text = win ? `${win} win 👑` : `now ${isX ? "X" : "O"}`
 	
+	switch(action.type) {
+		case "setValue":
+			const {x, win, squares} = state;
+			if (squares[action.index] ||  win) return state;
+			squares[action.index] = x ? "X" : "O";
+			const newState = {};
+			newState.squares = squares;
+			newState.x = !x;
+			const winer = checkWiner(squares);
+			newState.win = winer ? winer : null;
+			return newState;
+		
+		case "restart":
+			return {
+				squares: Array(9).fill(null),
+				x: true,
+				win: null
+			};
+		
+		default:
+			return state;
+	}
+}
+
+function App() {
+	const [{squares, win, x}, dispatch] = useReducer(reducer, initState)
+	const text = win ? `${win} win 🏆` : `Now ${x ? "X" : "O"} trun!`;
   	return (
     	<div className="container">
-    		{grid.map((s, index) => <Square xORy={s} onClick={() => handleClick(index)} />)}
+    		{squares.map((el, index) => <Square text={el} fun={() => dispatch({type: "setValue", index: index})} />)}
     		<span className="twoSpan">{text}</span>
-    		<button className="twoSpan" onClick={restart}>Restart</button>
+    		<button className="twoSpan" onClick={() => dispatch({type: "restart", data: initState})}>Restart</button>
     	</div>
   	);
 }
