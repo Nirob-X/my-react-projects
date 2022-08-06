@@ -1,0 +1,32 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+.container {
+	display: grid;
+	grid-template: repeat(3, 100px) 50px 50px / repeat(3, 100px);
+	grid-gap: 5px;
+	justify-content: center;
+	align-content: center;
+	margin-top: 50px;
+}
+
+.container span {
+	background-color: #00000020;
+	display: grid;
+	place-items: center;
+	font-size: 50px;
+	font-family: sanf;
+	color: #000000b0;
+}
+
+.twoSpan {
+	grid-column: 1 / -1;
+	font-size: 25px;
+}
+
+span.twoSpan {
+	font-size: 25px;
+}
+
