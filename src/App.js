@@ -1,58 +1,149 @@
 import {useReducer} from "react";
 import DigitButton from "./components/DigitButton";
+import OparetionButton from "./components/OparetionButton";
 import "./index.css";
 
-export const ACTION = {
+export const ACTIONS = {
 	addDigit: "addDigit",
 	calculate: "calculate",
+	paretion: "addOparetion",
 	clearAll: "clearAll",
 	clearOne: "deleteOne"
 }
 
-const initState = {
-	currentText: "",
-	prevText: "",
-	oparetion: null
-}
-
 const reducer = (state, action) => {
 	switch(action.type) {
-		case ACTION.addDigit:
-			const newState = {
-				...state, currentText: state.currentText + action.digit
+		case ACTIONS.addDigit:
+			if (state.overwrite) {
+				return {
+					...state,
+					currentOparend: action.digit,
+					overwrite: false
+				}
 			}
-			return newState;
+			
+			if (state.currentOparend === "0" && action.digit !== ".") {
+				return {
+					...state,
+					currentOparend: action.digit
+				}
+			}
+			
+			if (action.digit === "0" && state.currentOparend === "0") return state;
+			if (action.digit === "." && state.currentOparend && state.currentOparend.includes(".")) return state;
+			
+			return {
+				...state,
+				currentOparend: `${state.currentOparend || ""}${action.digit}`
+			};
+			
+		case ACTIONS.oparetion:
+			if (state.currentOparend == null && state.previousOparend == null){
+			 	return state;
+			}
+
+			if (state.currentOparend == null) {
+				return {
+					...state,
+					oparetion: action.oparetion
+				}
+			}
+
+			if (state.previousOparend == null) {
+				return {
+					...state,
+					oparetion: action.oparetion,
+					previousOparend: state.currentOparend,
+					currentOparend: null
+				}
+			}
+
+			return {
+				...state,
+				previousOparend: calculate(state),
+				currentOparend: null,
+				oparetion: action.oparetion
+			}
+
+		case ACTIONS.calculate:
+			if (state.currentOparend == null || state.previousOparend == null || state.oparetion == null) {
+				return state;
+			}
+
+			return {
+				...state,
+				previousOparend: null,
+				currentOparend: calculate(state),
+				oparetion: null,
+				overwrite: true
+			}
+		case ACTIONS.clearOne:
+			if (state.currentOparend == null) return state;
+			if (state.overwrite) {
+				return {
+					...state,
+					currentOparend: null,
+					previousOparend: null,
+					oparetion: null,
+					overwrite: false
+				}
+			}
+			return {
+				...state,
+				currentOparend: state.currentOparend.slice(0, -1)
+			}
+		
+		case ACTIONS.clearAll:
+			return {}
+		
+		default:
+			return state;
+	}
+}
+
+const calculate = (state) => {
+	const current = parseFloat(state.currentOparend);
+	const previous = parseFloat(state.previousOparend);
+	switch(state.oparetion) {
+		case "+":
+			return `${previous + current}`;
+		case "-":
+			return `${previous - current}`;
+		case "÷":
+			return `${previous / current}`;
+		case "*":
+			return `${previous * current}`;
 		default:
 			return state;
 	}
 }
 
 function App() {
-	const [{currentText, prevText, oparetion}, dispatch] = useReducer(reducer, initState);
+	const [{currentOparend, previousOparend, oparetion}, dispatch] = useReducer(reducer, {});
   return (
     <div className="container">
     	<div className="full">
-    		<p>{prevText} {oparetion}</p>
-    		<p>{currentText}</p>
+    		<p className="prevOparend">{previousOparend} {oparetion}</p>
+    		<p className="currentOparend">{currentOparend}</p>
     	</div>
-    	<button className="two-span">AC</button>
-    	<button>DET</button>
-    	<button>÷</button>
+    	<button className="two-span" onClick={() => dispatch({type: ACTIONS.clearAll})}>AC</button>
+    	<button onClick={() => dispatch({type: ACTIONS.clearOne})}>DEL</button>
+    	<OparetionButton oparetion="÷" dispatch={dispatch} />
     	<DigitButton digit="1" dispatch={dispatch} />
     	<DigitButton digit="2" dispatch={dispatch} />
     	<DigitButton digit="3" dispatch={dispatch} />
-    	<button>x</button>
+    	<OparetionButton oparetion="*" dispatch={dispatch} />
     	<DigitButton digit="4" dispatch={dispatch} />
     	<DigitButton digit="5" dispatch={dispatch} />
     	<DigitButton digit="6" dispatch={dispatch} />
-    	<button>-</button>
+    	<OparetionButton oparetion="-" dispatch={dispatch} />
     	<DigitButton digit="7" dispatch={dispatch} />
     	<DigitButton digit="8" dispatch={dispatch} />
     	<DigitButton digit="9" dispatch={dispatch} />
-    	<button>+</button>
+    	<OparetionButton oparetion="+" dispatch={dispatch} />
     	<DigitButton digit="." dispatch={dispatch} />
     	<DigitButton digit="0" dispatch={dispatch} />
-    	<button className="two-span">=</button>
+    	<button className="two-span" onClick={() => dispatch({type: ACTIONS.calculate})}>=</button>
     </div>
   );
 }
