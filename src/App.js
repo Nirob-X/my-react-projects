@@ -41,13 +41,18 @@ const reducer = (state, action) => {
 			if (state.currentOparend == null && state.previousOparend == null){
 			 	return state;
 			}
-
+			
 			if (state.currentOparend == null) {
 				return {
 					...state,
 					oparetion: action.oparetion
 				}
 			}
+
+			if (state.currentOparend === ".") {
+				return state;
+			}
+			
 
 			if (state.previousOparend == null) {
 				return {
@@ -58,6 +63,7 @@ const reducer = (state, action) => {
 				}
 			}
 
+
 			return {
 				...state,
 				previousOparend: calculate(state),
@@ -66,7 +72,7 @@ const reducer = (state, action) => {
 			}
 
 		case ACTIONS.calculate:
-			if (state.currentOparend == null || state.previousOparend == null || state.oparetion == null) {
+			if (state.currentOparend == null || state.previousOparend == null || state.oparetion == null || state.currentOparend === ".") {
 				return state;
 			}
 
@@ -78,7 +84,7 @@ const reducer = (state, action) => {
 				overwrite: true
 			}
 		case ACTIONS.clearOne:
-			if (state.currentOparend == null) return state;
+			if (!Boolean(state.currentOparend)) return state;
 			if (state.overwrite) {
 				return {
 					...state,
@@ -88,13 +94,21 @@ const reducer = (state, action) => {
 					overwrite: false
 				}
 			}
+
+			if (state.currentOparend.length === 1) {
+				return {
+					...state,
+					currentOparend: null
+				};
+			}
+			
 			return {
 				...state,
 				currentOparend: state.currentOparend.slice(0, -1)
-			}
+			};
 		
 		case ACTIONS.clearAll:
-			return {}
+			return {};
 		
 		default:
 			return state;
@@ -110,6 +124,7 @@ const calculate = (state) => {
 		case "-":
 			return `${previous - current}`;
 		case "÷":
+			if (current === 0) return previous;
 			return `${previous / current}`;
 		case "*":
 			return `${previous * current}`;
@@ -126,8 +141,8 @@ function App() {
     		<p className="prevOparend">{previousOparend} {oparetion}</p>
     		<p className="currentOparend">{currentOparend}</p>
     	</div>
-    	<button className="two-span" onClick={() => dispatch({type: ACTIONS.clearAll})}>AC</button>
-    	<button onClick={() => dispatch({type: ACTIONS.clearOne})}>DEL</button>
+    	<button className="two-span" onClick={() => dispatch({type: ACTIONS.clearAll})}>C</button>
+    	<button onClick={() => dispatch({type: ACTIONS.clearOne})}>DE</button>
     	<OparetionButton oparetion="÷" dispatch={dispatch} />
     	<DigitButton digit="1" dispatch={dispatch} />
     	<DigitButton digit="2" dispatch={dispatch} />

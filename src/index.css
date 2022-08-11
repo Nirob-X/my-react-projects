@@ -2,17 +2,25 @@
 	margin: 0px;
 	padding: 0px;
 	box-sizing: border-box;
+	user-select: none;
 }
 
 :root {
-	--bg-color: rgba(150, 200, 255, 1);
-	--bg-hover-color: rgba(150, 200, 255, 0.8);
-	--bg-div: rgba(0,0,0, 0.7);
-	--size: 1.8rem;
+	--prev-size: 1.2rem;
+	--current-size: 1.8rem;
+	--dark-screen: #111827;
+	--dark-bg: #1F2937;
+	--soft-gray: #9CA3AF;
+	--teal-bg: #40B5EB;
+	--light-bg: #F0FDFF;
+	--light-btn-bg: #88BEF5;
+	--white: #ffffff;
 }
 
 body {
-	background-color: lightGray;
+	background-color: var(--dark-bg); 
+	/* background: linear-gradient(to left, var(--dark), var(--soft-dark)); */
+	/* background: radial-gradient(circle, var(--soft-dark) 0% 90%, var(--dark)); */
 }
 
 #root {
@@ -20,12 +28,11 @@ body {
 }
 
 .container {
-	/* background: #000; */
 	margin-top: 50px;
 	display: grid;
 	justify-content: center;
 	grid-gap: 5px;
-	grid-template: minmax(80px, auto) repeat(5, 80px) / repeat(4, 80px);
+	grid-template: minmax(90px, auto) repeat(5, 80px) / repeat(4, 80px);
 }
 
 .container div p{
@@ -33,33 +40,37 @@ body {
 	clear: both;
 	word-wrap: break-word;
 	word-break: break-all;
-	color: white;
 }
 
 .currentOparend {
-	font-size: var(--size);
+	font-size: var(--current-size);
 }
 
 .prevOparend {
-	font-size: 1.2rem;
+	font-size: var(--prev-size);
 }
 
 .container div {
-	background-color: var(--bg-div);
-	padding: .6rem;
+	background-color: var(--teal-bg);
+	padding: 1rem;
+	color: var(--white);
+	box-shadow: var(--teal-bg) 0px 0px 2px;
+	border-radius: 2px;
 }
 
 .container > button {
+	border-radius: 2px;
 	font-size: 2rem;
-	background-color: var(--bg-color);
+	background-color: var(--dark-screen);
 	border: none;
-	color: rgba(0, 0, 0, 0.6);
-	box-shadow: rgba(0,0,0,0.2) 0px 1px 2px;
+	color: var(--soft-gray);
+	box-shadow: var(--dark-screen) 0px 1px 2px;
+	transition: filter 300ms ease;
 }
 
+/* .container > button:focus, */
 .container > button:active {
-	filter: brightness(1.1);
-	/* background-color: var(--bg-hover-color); */
+	filter: brightness(5);
 }
 
 .container .two-span {
@@ -69,3 +80,21 @@ body {
 .container .full {
 	grid-column: 1 / -1;
 }
+
+
+@media (prefers-color-scheme: light) {
+	.container > button {
+		background-color: var(--light-btn-bg);
+		color: var(--dark-bg);
+	}
+
+	.container > div {
+		background-color: var(--dark-bg);
+		color: var(--white);
+	}
+
+	body {
+		background-color: var(--light-bg);
+	}
+}
+
