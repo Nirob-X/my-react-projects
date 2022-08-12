@@ -1,8 +1,12 @@
+import ClickCounter from "./components/ClickCounter";
+import DoubleClickCounter from "./components/DoubleClickCounter";
+
 function App() {
   return (
-    <div>
-    	nothing here....
-    </div>
+  	<>
+    	<ClickCounter />
+    	<DoubleClickCounter />
+    </>
   );
 }
 
