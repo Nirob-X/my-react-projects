@@ -4,8 +4,9 @@
   padding: 0 20px 10px 25px;
 }
 .taskBox.overflow{
-  overflow-y: auto;
-  max-height: 300px;
+  /* overflow-y: auto; */
+  /* overflow-x: hidden; */
+  /* max-height: 300px; */
 }
 .taskBox::-webkit-scrollbar{
   width: 5px;
@@ -23,6 +24,6 @@
   .taskBox{
     margin-top: 20px;
     margin-right: 5px;
-    padding: 0 15px 10px 20px;
+    padding: 0 15px 10px 20px; 
   }
 }

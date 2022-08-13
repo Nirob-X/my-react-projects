@@ -5,6 +5,15 @@
   padding-bottom: 16px;
   align-items: flex-start;
   border-bottom: 1px solid #ccc;
+  opacity: 1;
+  transform: scale(1);
+  /* transition: transform, opacity 500ms ease-out; */
+}
+
+.hide {
+	/* transform: translateX(150px); */
+	/* opacity: 0; */
+	display: none;
 }
 
 .task:last-child{
@@ -42,7 +51,6 @@
 }
 
 .settings .taskMenu{
-  z-index: 10;
   right: -5px;
   bottom: -65px;
   padding: 5px 0;
@@ -64,6 +72,7 @@
   bottom: -65px;
   transform-origin: top right;
 }
+
 
 .taskMenu.show{
   transform: scale(1);
