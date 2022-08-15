@@ -34,10 +34,10 @@ export default function Task({dispatch, data, id, display, setInputText, setInpu
 	}
 	
 	return (
-		<TopLevelLi className={`${applyClass(display)}`}>
+		<TopLevelLi className={`${applyClass(display)} ${data.checked ? "checked" : ""}`}>
 			<Label htmlFor={id}>
 				<input onChange={() => dispatch({type: ACTIONS.CHECKED, payload: {data: data, id: id}})} type="checkbox" id={id} checked={data.checked}/>
-				<p className={`${data.checked ? "checked" : ""}`}>{data.text}</p>
+				<p>{data.text}</p>
 			</Label>
 		    <Settings className="settings">
 				<i className="uil uil-ellipsis-h" onClick={() => setShow(true)}></i>

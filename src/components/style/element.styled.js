@@ -145,8 +145,7 @@ export const Button = styled.button`
 
 export const Ul = styled.ul`
 	margin-top: 20px;
-	margin-right: 5px;
-	padding: 0 20px 10px 25px;
+	padding: 0 20px 10px 20px;
 
 	&.overflow {
 		overflow-y: auto;
@@ -169,8 +168,6 @@ export const Ul = styled.ul`
 
 	& > li:last-child {
 		margin-bottom: 0;
-		border-bottom: 0;
-		padding-bottom: 0;
 
 		& ul {
 			bottom: 0;
@@ -194,11 +191,25 @@ export const Ul = styled.ul`
 export const TopLevelLi = styled.li`
 	list-style: none;
 	font-size: 17px;
-	margin-bottom: 18px;
-	padding-bottom: 16px;
+	margin-bottom: 10px;
+	border: 1px solid #e5e5e5;
+	padding: 10px;
+	border-radius: 6px;
 	align-items: center;
-	border-bottom: 1px solid #ccc;
-	transition: opacity, transform 200ms ease;
+	gap: 6px;
+	width: 100%;
+	transition: opacity, transform, background-color, border-color, box-shadow 200ms ease;
+
+	&.checked {
+		--color: #0d6efd;
+		background-color: var(--color);
+		box-shadow: rgba(13, 110, 253, .60) 0px 2px 5px;
+		border-color: var(--color);
+
+		& i {
+			color: #fff;
+		}
+	}
 
 	&.hide {
 		display: none;
@@ -209,18 +220,44 @@ export const Label = styled.label`
 	display: flex;
 	align-items: center;
 
-	& input {
-		accent-color: #3C87FF;
+	& input[type=checkbox] {
+	  visibility: hidden
+	}
+	
+	& input[type=checkbox] ~ p {
+	  position: relative;
+	}
+	
+	& input[type=checkbox] ~ p:before {
+	  content: "";
+	  position: absolute;
+	  border: 1px solid #e5e5e5;
+	  height: 14px;
+	  font-size: 12px;
+	  aspect-ratio: 1;
+	  top: 50%;
+	  transform: translateY(-50%);
+	  left: -26px;
+	  border-radius: 3px;
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	  background-color: #ffffff;
+	}
+	
+	& input[type=checkbox]:checked ~ p {
+	  color: #ffffff;
+	}
+	
+	& input[type=checkbox]:checked ~ p:before {
+	  content: "✔";
+	  color: #0d6efd;
 	}
 
 	& p {
 		user-select: none;
 		margin-left: 12px;
 		word-wrap: break-word;
-
-		&.checked {
-			text-decoration: line-through;
-		}
 	}
 `
 
@@ -240,9 +277,9 @@ export const TaskMenu = styled.ul`
 	background: #fff;
 	position: absolute;
 	border-radius: 4px;
+	box-shadow: 0 0 6px rgba(0,0,0,0.15);
 	transform: scale(0);
 	transform-origin: top right;
-	box-shadow: 0 0 6px rgba(0,0,0,0.15);
 	transition: transform 0.2s ease;
 
 	&.show {
