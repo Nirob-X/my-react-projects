@@ -1,17 +1,18 @@
 import {useState, useRef} from "react";
-import Styled from "./Task.module.css";
 import useOnOutSideClick from "./useOnOutSideClick";
 import {ACTIONS} from "./Main";
+import {TopLevelLi, Label, Settings, TaskMenu} from "./style/element.styled";
 
-export default function Task({dispatch, data, id, display, setInputText, setIdAndFun}) {
+export default function Task({dispatch, data, id, display, setInputText, setInputAndFun}) {
 	const [show, setShow] = useState(false);
 
-	function applyClass(x) {
+	function applyClass(x, status) {
 		if (x === "ALL") {
+			
 			return "";
 		} else if (x === "PENDING") {
 			if (data.checked) {
-				return Styled.hide;
+				return "hide";
 			} else {
 				return "";
 			}
@@ -19,7 +20,7 @@ export default function Task({dispatch, data, id, display, setInputText, setIdAn
 			if (data.checked) {
 				return "";
 			} else {
-				return Styled.hide;
+				return "hide";
 			}
 		}
 	}
@@ -28,23 +29,23 @@ export default function Task({dispatch, data, id, display, setInputText, setIdAn
 	useOnOutSideClick(ref, () => setShow(false));
 
 	const edit = () => {
-		setIdAndFun(data.text, id);
+		setInputAndFun(data.text, id);
 		setShow(false);
 	}
 	
 	return (
-		<li className={`${Styled.task} ${applyClass(display)}`}>
-			<label htmlFor={id}>
+		<TopLevelLi className={`${applyClass(display)}`}>
+			<Label htmlFor={id}>
 				<input onChange={() => dispatch({type: ACTIONS.CHECKED, payload: {data: data, id: id}})} type="checkbox" id={id} checked={data.checked}/>
-				<p className={data.checked ? Styled.checked : ""}>{data.text}</p>
-			</label>
-		    <div className={Styled.settings}>
+				<p className={`${data.checked ? "checked" : ""}`}>{data.text}</p>
+			</Label>
+		    <Settings className="settings">
 				<i className="uil uil-ellipsis-h" onClick={() => setShow(true)}></i>
-				<ul ref={ref} className={`${Styled.taskMenu} ${show && Styled.show}`}>
+				<TaskMenu ref={ref} className={`${show ? "show" : ""}`}>
 					<li onClick={edit}><i className="uil uil-pen"></i>Edit</li>
 		            <li onClick={() => dispatch({type: ACTIONS.DELETE_TASK, payload: { id }})}><i className="uil uil-trash"></i>Delete</li>
-		        </ul>
-			</div>
-		</li>
+		        </TaskMenu>
+			</Settings>
+		</TopLevelLi>
 	);
 }

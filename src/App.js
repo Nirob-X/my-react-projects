@@ -1,11 +1,12 @@
 import Main from "./components/Main";
-import "./index.css";
+import {Wrapper, GlobalStyle} from "./components/style/element.styled"
 
 function App() {
   return (
-    <div className="wrapper">
+    <Wrapper>
+    	<GlobalStyle />
     	<Main />
-    </div>
+    </Wrapper>
   );
 }
 

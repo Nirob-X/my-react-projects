@@ -1,9 +1,10 @@
-import Styled from "./Ul.module.css"
+import {Ul} from "./style/element.styled";
 
-export default function UnorderList({children}) {
+export default function UnorderList({children, length}) {
+	
 	return (
-		<ul className={`${Styled.taskBox} ${Styled.overflow}`}>
+		<Ul  className={length > 5 ? "overflow" : undefined}>
 			{children}
-		</ul>
+		</Ul>
 	);
 }

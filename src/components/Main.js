@@ -1,6 +1,7 @@
-import {useReducer, useState} from "react";
-import ControlForm from "./ControlForm";
+import {useReducer, useState, useRef} from "react";
+import {Form} from "./style/element.styled";
 import Controls from "./Controls";
+import svgLogo from "./bars-icon.svg";
 import UnorderList from "./UnorderList";
 import Task from "./Task";
 
@@ -28,12 +29,6 @@ function reducer(prevState, action){
 
 				return {
 					...prevState
-				}
-			}
-			const stateKeys = Object.keys(prevState);
-			for (let item of stateKeys) {
-				if (prevState[item].text === text) {
-					return prevState;
 				}
 			}
 			
@@ -72,23 +67,60 @@ function reducer(prevState, action){
 function Main() {
 	const [state, dispatch] = useReducer(reducer, {});
 	const [display, setDisplay] = useState("ALL");
-	const [inputText, setInputText] = useState("");
-	const [uid, setUid] = useState();
+	const [input, setInput] = useState("");
+	const [uid, setUid] = useState(null);
+	const ref = useRef(null);
 
-	const setIdAndFun = (text, id) => {
-		setUid(id);
-		setInputText(text);
+	
+	function formateText(oldText) {
+		const firstLetter = oldText[0].toUpperCase();
+		const restLetter = oldText.slice(1).toLowerCase();
+		return firstLetter + restLetter;
 	}
+
+	function has(inputData) {
+		const array = Object.values(state);
+		for (let element of array) {
+			console.log(element)
+			if (element.text === inputData) {
+				return false;
+			}
+			
+		}
+		return true;
+	}
+
+	function  handleSubmit(e) {
+		e.preventDefault();
+		const inputData = input.replace(/\s+/g, ' ').trim();
+		const taskText = formateText(inputData);
+		if (taskText && has(taskText)) {
+			dispatch({type: ACTIONS.ADD_TASK, payload: {text: taskText, uid: uid}});
+			setInput("");
+			setUid(null)
+		}
+	}
+
+	function handleEdit(text, textId) {
+		setInput(text);
+		setUid(textId);
+		ref.current.focus();
+	}
+	
 
 	return (
 		<>
-			<ControlForm dispatch={dispatch} data={{inputText: inputText, setInputText: setInputText, uid: uid, setUid: setUid}}/>
+			<Form className="taskInput" onSubmit={handleSubmit}>
+				<img src={svgLogo} alt="icon" />
+	            <input ref={ref} type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Add Task Here"/>
+			</Form>
 			<Controls dispatch={() => dispatch({type: ACTIONS.CLEAR_ALL})} setDisplay={setDisplay} display={display}  />
-			<UnorderList>
-				{Object.keys(state).map(key => <Task key={key} dispatch={dispatch} data={state[key]} id={key} display={display} setInputText={setInputText} setIdAndFun={setIdAndFun} />)}
+			<UnorderList length={Object.keys(state).length}>
+				{Object.keys(state).map(key => <Task key={key} dispatch={dispatch} data={state[key]} id={key} display={display} setInputText={setInput} setInputAndFun={handleEdit} />)}
 			</UnorderList>
 		</>
 	);
 }
 
-export default Main
+export default Main;
+
