@@ -1,0 +1,12 @@
+.active {
+	background-color: rgba(65 46 37 / 0.5);
+	border-radius: 5px;
+}
+
+.correct {
+	color: green;
+}
+
+.incorrect {
+	color: red;
+}
