@@ -1,67 +1,72 @@
-import {useRef, useState, useEffect, useReducer} from "react";
+import {useRef, useEffect, useReducer} from "react";
 import Char from "./components/Char";
-// import TimeAndSpeed from "./components/TimeAndSpeed"
 import "./global.css";
 
-const text = () => `My name is al imam, I'm student in laksamipur politechnic institute.`.split("");
+const text = () => `My name is al imam, I'm student in lakshmipur politechnic institute.`.split("");
 
 const ACTIONS = {
-	INPUT: "INPUT",
-	ACTIVE_INDEX: "ACTIVE-INDEX",
+	INIT: "INIT",
+	INPUT_CHANGE: "INPUT_CHANGE",
 	RESET: "RESET",
 	TIME: "TIME",
-	WPM: "WPM"
 }
 
 const initState = {
-	wpm: 0,
-	time: 0
+	activeIndex: 0,
+	inputText: "",
+	time: 0,
+	testText: null,
+	correctWord: 0
 }
 
 function reducer(prevState, action) {
 	switch(action.type) {
-		case ACTIONS.INPUT:
+		case ACTIONS.INPUT_CHANGE:
+			const {text} = action.payload;
+			const textArray = text.split(" ");
+			const correctWord = prevState.testText.filter((item) => textArray.indexOf(item) !== -1).length;
+
 			return {
 				...prevState,
-				inputText: action.payload.text
+				inputText: text,
+				activeIndex: text.length,
+				correctWord: correctWord
 			}
-		case ACTIONS.ACTIVE_INDEX:
-			return {
-				...prevState,
-				activeIndex: prevState.activeIndex + 1
-			}
+			
 		case ACTIONS.RESET:
 			return {
-				...action.payload
+				...action.payload,
+				testText: prevState.testText
 			}
+			
 		case ACTIONS.TIME:
 			return {
 				...prevState,
-				time: action.payload
+				time: prevState.time + 1
 			}
+			
+		case ACTIONS.INIT:
+			return {
+				...prevState,
+				testText: action.payload
+			}
+			
 		default: return prevState;
 	}
 }
 
 
 function App() {
-	// eslint-disable-next-line
-	const [state, dispatch] = useReducer(reducer, initState)
-	const [input, setInput] = useState("");
-	const [activeIndex, setActiveIndex] = useState(0);
-	const [start, setStart] = useState(false);
-	const [time, setTime] = useState(0);
+	const [state, dispatch] = useReducer(reducer, initState);
 	const {current} = useRef(text());
 	const inputRef = useRef(null);
 	const id = useRef(null);
 
 	const proccesInput = (value) => {
-		setInput(value);
-		setActiveIndex(value.length);
-		
-		if (value.length === current.length) {
+		dispatch({type: ACTIONS.INPUT_CHANGE, payload: {text: value}})
+
+		if (value.length >= current.length) {
 			inputRef.current.disabled = true;
-			setStart(false);
 			clearInterval(id.current)
 			return;
 		}
@@ -69,29 +74,31 @@ function App() {
 
 	const handleStart = (e) => {
 		clearInterval(id.current)
-		setInput("");
-		setActiveIndex(0);
-		setStart(true);
-		setTime(0);
+		dispatch({type: ACTIONS.RESET, payload: initState})
 		inputRef.current.disabled = false;
 		inputRef.current.focus();
+		
 		id.current = setInterval(() => {
-			setTime(oldTime => oldTime + 1)
+			dispatch({type: ACTIONS.TIME})
 		}, 1000)
 	}
 
 	useEffect(() => {
+	
+		dispatch({type: ACTIONS.INIT, payload: current.join("").split(" ")})
 		inputRef.current.disabled = true;
-	}, [])
+		
+	}, [current])
 	
   	return (
     	<div>
 			<div>
-				<p>Time {time}</p>
+				<p>Time Ellepsed: {`${Math.floor(state.time / 60)}`.padStart("2", "0")}:{`${state.time % 60}`.padStart("2", "0")}</p>
+				<p>Word Per Minute: {((state.correctWord / (state.time / 60)) || 0).toFixed(2)}</p>
 			</div>
-    		<p>{current.map((char, index) => <Char active={index === activeIndex} char={char} correct={char === input[index] ? true : activeIndex < index ? null : false } />)}</p>
-    		<input ref={inputRef} value={input} onChange={(e) => proccesInput(e.target.value)} type="text" />
-    		<button type="button" onClick={handleStart}>{start ? "Restart" : "Start"}</button>
+    		<p>{current.map((char, index) => <Char active={index === state.activeIndex} char={char} correct={char === state.inputText[index] ? true : state.activeIndex < index ? null : false } />)}</p>
+    		<input ref={inputRef} value={state.inputText} onChange={(e) => proccesInput(e.target.value)} type="text" />
+    		<button type="button" onClick={handleStart}>{state.inputText === "" ? "Start Test" : "Restart Test"}</button>
     	</div>
   	);
 }
