@@ -3,14 +3,14 @@ import style from "./Char.module.css";
 
 function Char({char, active, correct}) {	
 	if (active) {
-		return <span className={style.active}>{char}</span>
+		return <span className="active">{char}</span>
 	}
 	if (correct === true) {
-		return <span className={style.correct}>{char}</span>
+		return <span className="correct">{char}</span>
 	}
 
 	if (correct === false) {
-		return <span className={style.incorrect}>{char}</span>
+		return <span className="incorrect">{char}</span>
 	}
 
 	return <span>{char}</span>
