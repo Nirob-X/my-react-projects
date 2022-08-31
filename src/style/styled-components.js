@@ -1,108 +1,132 @@
 import styled, {createGlobalStyle} from "styled-components";
-import {AiFillClockCircle} from "react-icons/ai";
-import {IoIosSpeedometer} from "react-icons/io";
 
-export const GlobalStyle = createGlobalStyle`
-	@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&family=Roboto+Mono&display=swap');
-	
+export const GlobalStyle = createGlobalStyle`		
 	* {
 		box-sizing: border-box;
 		margin: 0;
 		padding: 0;
 	}
 
+	:root {
+		--mono-font: 'Share Tech Mono', monospace;
+		--text-font: 'Nunito Sans', sans-serif;
+		--green-color: rgba(84, 255, 146, .5);
+		--dark-green: #00CC00;
+		--red-color: rgba(255, 0, 103, 1);
+		--black-color: rgba(40, 40, 43, 1);
+		--black-75: rgba(40, 40, 43, .75);
+		--black-60: rgba(40, 40, 43, .60);		
+	}
+	
 	body {
-		background-color: #000;
+		@media screen and (max-width: 640px) {
+			padding: 0 16px;
+		}
 	}
 `
 
 export const Title = styled.div`
-	font-size: 1.6rem;
-	color: #000;
-	text-align: center;
-	font-family: 'Roboto Condensed', sans-serif;
-	padding: 10px 0;
-	border-bottom: 1px #011111 solid;
+	font-size: 38px;
+	text-align: left;
+	color: var(--black-color);
+	font-family: var(--text-font);
+	font-weight: bold;
+	margin: 32px 0; 
 `
 
 export const Container = styled.div`
-	background-color: rgba(255, 255, 255, 1);
-	color: #000;
-	margin: 20px 10px 20px;
-	padding: 10px 0;
-	border-radius: 5px;
-`
-export const TimeIcon = styled(AiFillClockCircle)`
-	width: 25px;
-	height: auto;
-	position: relative;
-	top: -1px;
-`
-export const SpeedIcon = styled(IoIosSpeedometer)`
-	width: 25px;
-	height: auto;
-	position: relative;
-	top: -1px;
+	margin: 24px auto;
+	width: 860px;
+	
+	@media screen and (max-width: 920px) {
+		width: 640px;
+	}
+
+	@media screen and (max-width: 640px) {
+		width: fit-content;
+	}
+
 `
 
 export const InfoWrapper = styled.div`
 	display: flex;
 	align-items: center;
-	justify-content: space-around;
-	margin-top: 20px;
+	justify-content: space-between;
+`
+
+export const ButtonGroup = styled.div`
+	display: flex;
+	gap: 32px;
+	margin-top: 24px;
 `
 
 export const Info = styled.div`
-	padding: 5px 0;
-	display: flex;
-	gap: 5px;
+	padding: 8px 0;
+	font-family: var(--text-font);
+
 `
 
 export const InfoText = styled.span`
-	font-family: 'Roboto Condensed', sans-serif;
-	font-size: 20px;
-	color: #111827;
+	font-size: 28px;
+	color: var(--black-75);
+	@media screen and (max-width: 640px) {
+		font-size: 21px;
+	}
 `
 
 export const P = styled.p`
-	font-size: 1.4rem;
-	font-family: 'Roboto Mono', monospace;
-	color: #A8A8A8;
-	line-height: 1.5;
+	font-size: 28px;
+	font-family: var(--mono-font);
+	color: var(--black-60);
+	line-height: 1.8;
 	text-align: left;
 
 	& span.active {
-	        background-color: #d3e9ff;
+	        background-color: var(--green-color);
 	}
 	
 	& span.correct {
-	        color: rgba(105,161,214,255);
+	        color: var(--dark-green);
 	}
 	
 	& span.incorrect {
-	        color: rgba(98,70,68,255);
+	        color: var(--red-color);
 	        background-color: rgba(254,204,203,255);
+	}
+
+	@media screen and (max-width: 640px) {
+		font-size: 21px;
 	}
 `
 
 export const TextWrapper = styled.div`
-	padding: 10px 15px;
+	font-family: var(--text-font);
 `
 
 export const InputFild = styled.input`
 	position: absolute;
-	left: -100vw;
-	top: 300px;
+	transform: scale(0);
 `
 
-export const StartButton = styled.button`
-	font-size: 1rem;
-	color: black;
-	border-radius: 20px;
-	padding: 5px 10px;
-	border: 3px #d3e9ff solid;
-	background-color: rgba(105,161,214,255);
+export const Button = styled.button`
+	font-size: 21px;
+	color: rgb(255, 255, 255);
+	font-family: var(--text-font);
+	padding: 8px 32px;
+	background-color: #311B92;
+	border: none;
+	box-shadow: 0px 5px 20px #311b924D;
 	text-align: center;
-	display: block;
-	margin: 10px auto;
+	border-radius: 5px;
+	transition: transform .2s ease;
+
+	&:hover{
+		filter: brightness(2);
+	}
+	&:active {
+		transform: translateY(5px); 
+	}
+	@media screen and (max-width: 640px) {
+		font-size: 15px;
+	}
 `

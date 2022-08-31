@@ -1,7 +1,6 @@
 import {useRef, useEffect, useReducer} from "react";
 import Char from "./components/Char";
-import "./global.css";
-import {GlobalStyle, InputFild, DropDown, DropDownTitle, Title, P, Container, TextWrapper, TimeIcon, SpeedIcon, InfoWrapper, Info, InfoText, StartButton} from "./style/styled-components"
+import {GlobalStyle, InputFild, Title, P, Container, TextWrapper, ButtonGroup, InfoWrapper, Info, InfoText, Button} from "./style/styled-components"
 
 const text = () => `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut`.split("");
 
@@ -85,7 +84,7 @@ function App() {
 
 	const changeText = async () => {
 		try {		
-			const res = await fetch("http://metaphorpsum.com/paragraphs/1/5")
+			const res = await fetch("http://metaphorpsum.com/paragraphs/1/4")
 			const data = await res.text()
 			current.length = 0
 			const array = data.toLowerCase().split("");
@@ -118,21 +117,21 @@ function App() {
     		<GlobalStyle />
     		<Title>Typing Speed Test</Title>
 			<InfoWrapper>
-				<Info>
-					<TimeIcon />
-					<InfoText>{`${Math.floor(state.time / 60)}`.padStart("2", "0")}m {`${state.time % 60}`.padStart("2", "0")}s</InfoText>
+				<Info> 
+					<InfoText>Time: {`${Math.floor(state.time / 60)}`.padStart("2", "0")}:{`${state.time % 60}`.padStart("2", "0")}sec</InfoText>
 				</Info>
 				<Info>
-					<SpeedIcon />
-					<InfoText>{((state.correctWord / (state.time / 60)) || 0).toFixed(2)}WPM</InfoText>
+					<InfoText>WPM: {((state.correctWord / (state.time / 60)) || 0).toFixed(2)}</InfoText>
 				</Info>
 			</InfoWrapper>
 			<TextWrapper>
     			<P onClick={handleP}>{current.map((char, index) => <Char active={index === state.activeIndex} char={char} correct={char === state.inputText[index] ? true : state.activeIndex < index ? null : false } />)}</P>
 			</TextWrapper>
     		<InputFild ref={inputRef} value={state.inputText} onChange={(e) => proccesInput(e.target.value)} type="text" />
-    		<StartButton type="button" onClick={handleStart}>{state.inputText === "" ? "Start Test" : "Restart Test"}</StartButton>
-    		<StartButton type="button" onClick={changeText}>Change Text</StartButton>
+    		<ButtonGroup>
+    			<Button type="button" onClick={handleStart}>{state.inputText === "" ? "Start Test" : "Restart Test"}</Button>
+    			<Button type="button" onClick={changeText}>Change Text</Button>
+    		</ButtonGroup>
     	</Container>
   	);
 }
