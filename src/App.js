@@ -1,8 +1,8 @@
 import {useRef, useEffect, useReducer} from "react";
 import Char from "./components/Char";
-import {GlobalStyle, InputFild, Title, P, Container, TextWrapper, ButtonGroup, InfoWrapper, Info, InfoText, Button} from "./style/styled-components"
+import {GlobalStyle, InputFild, Title, P, Container, TextWrapper, ButtonGroup, InfoWrapper, Info, InfoText, Button} from "./style/styled-components";
 
-const text = () => `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut`.split("");
+const text = () => `layers are benign weights. to be more specific, we can assume that any instance of a can can be construed as an unplumbed beer. it's an undeniable fact, really; a town is the cupboard of an amusement. those periods are nothing more than quarters`.split("");
 
 const ACTIONS = {
 	INIT: "INIT",
@@ -84,7 +84,12 @@ function App() {
 
 	const changeText = async () => {
 		try {		
-			const res = await fetch("http://metaphorpsum.com/paragraphs/1/4")
+			const res = await fetch("http://metaphorpsum.com/paragraphs/1/4", {
+				method: "GET",
+				headers: {
+					accept: "text/plain",
+				},
+			});
 			const data = await res.text()
 			current.length = 0
 			const array = data.toLowerCase().split("");
